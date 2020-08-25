@@ -3,6 +3,12 @@ name = "mathlang"
 version = "0.1.0"
 authors = ["Nils Martel <nilsmartel@yahoo.de>"]
 edition = "2018"
+license = "MIT OR Apache-2.0"
+description = "Parse and modify mathematical expressions."
+repository = "https://github.com/nilsmartel/mathlang"
+readme = "README.md"
+keywords = ["math", "expression", "parsing", "evaluate", "compiler", "graph"]
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

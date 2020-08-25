@@ -8,6 +8,7 @@ description = "Parse and modify mathematical expressions."
 repository = "https://github.com/nilsmartel/mathlang"
 readme = "README.md"
 keywords = ["math", "expression", "parsing", "evaluate", "compiler", "graph"]
+categories = ["mathematics", "parsing", "science"]
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

@@ -7,7 +7,7 @@ license = "MIT OR Apache-2.0"
 description = "Parse and modify mathematical expressions."
 repository = "https://github.com/nilsmartel/mathlang"
 readme = "README.md"
-keywords = ["math", "expression", "parsing", "evaluate", "compiler", "graph"]
+keywords = ["math", "parsing", "evaluate", "compiler", "graph"]
 categories = ["mathematics", "parsing", "science"]
 
 

@@ -23,15 +23,63 @@ pub enum Expression {
     Number(Number),
 }
 
-impl From<&str> for Expression {
-    fn from(i: &str) -> Self {
-        Expression::parse(i).expect("failed to parse Expression").1
-    }
-}
-
 impl Expression {
     fn boxed(self) -> Box<Self> {
         Box::new(self)
+    }
+}
+
+impl std::ops::Neg for Expression {
+    type Output = Self;
+
+    fn neg(self) -> Self::Output {
+        Expression::Negate(self.boxed())
+    }
+}
+
+impl std::ops::BitXor for Expression {
+    type Output = Self;
+
+    fn bitxor(self, rhs: Self) -> Self::Output {
+        Expression::Power(self.boxed(), rhs.boxed())
+    }
+}
+
+impl std::ops::Add for Expression {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Expression::Add(self.boxed(), rhs.boxed())
+    }
+}
+
+impl std::ops::Sub for Expression {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Expression::Subtract(self.boxed(), rhs.boxed())
+    }
+}
+
+impl std::ops::Mul for Expression {
+    type Output = Self;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        Expression::Multiply(self.boxed(), rhs.boxed())
+    }
+}
+
+impl std::ops::Div for Expression {
+    type Output = Self;
+
+    fn div(self, rhs: Self) -> Self::Output {
+        Expression::Divide(self.boxed(), rhs.boxed())
+    }
+}
+
+impl From<&str> for Expression {
+    fn from(i: &str) -> Self {
+        Expression::parse(i).expect("failed to parse Expression").1
     }
 }
 

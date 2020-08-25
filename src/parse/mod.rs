@@ -1,5 +1,5 @@
-mod atomic;
-mod expression;
+pub mod atomic;
+pub mod expression;
 mod util;
 
 pub(crate) trait Parse

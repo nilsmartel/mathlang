@@ -1,9 +1,9 @@
 use super::{util, Parse};
 
 #[derive(Clone, Debug, PartialOrd, PartialEq, Eq, Ord)]
-struct Literal(String);
+pub struct Identifier(String);
 
-impl Parse for Literal {
+impl Parse for Identifier {
     fn parse(input: &str) -> nom::IResult<&str, Self> {
         use nom::{
             bytes::complete::{take_while, take_while1},
@@ -14,14 +14,14 @@ impl Parse for Literal {
 
         map(
             recognize(pair(take_while1(is_alpha), take_while(is_ident_char))),
-            |s: &str| Literal(s.to_string()),
+            |s: &str| Identifier(s.to_string()),
         )(input)
     }
 }
 
-impl From<&str> for Literal {
+impl From<&str> for Identifier {
     fn from(input: &str) -> Self {
-        Literal::parse(input).expect("Failed to parse literal").1
+        Identifier::parse(input).expect("Failed to parse literal").1
     }
 }
 
@@ -31,8 +31,8 @@ mod test {
     #[test]
     fn literal() {
         assert_eq!(
-            Literal::parse("my_number_123_ab_13"),
-            Ok(("", Literal("my_number_123_ab_13".to_string())))
+            Identifier::parse("my_number_123_ab_13"),
+            Ok(("", Identifier("my_number_123_ab_13".to_string())))
         );
     }
 
@@ -54,7 +54,7 @@ mod test {
 }
 
 #[derive(Clone, Copy, Debug, PartialOrd, PartialEq)]
-struct Number(f64);
+pub struct Number(f64);
 impl Eq for Number {}
 
 impl Parse for Number {

@@ -27,6 +27,31 @@ impl Expression {
     fn boxed(self) -> Box<Self> {
         Box::new(self)
     }
+
+    pub fn derive(&self, var: &Identifier) -> Expression {
+        use Expression::*;
+        match self {
+            Add(a, b) => a.derive(var) + b.derive(var),
+            Subtract(a, b) => a.derive(var) - b.derive(var),
+            // TODO i am not 100% sure about this
+            Multiply(a, b) => a.derive(var) * (**b).clone() + b.derive(var) * (**a).clone(),
+
+            Power(n, e) => {
+                e.derive(var) * ((**n).clone() ^ ((**e).clone() - Expression::from(1.0)))
+            }
+            _ => panic!("Failed to derive expression"),
+        }
+
+        // TODO simplify in the process
+    }
+
+    // TODO simplify function in the process
+}
+
+impl From<f64> for Expression {
+    fn from(n: f64) -> Self {
+        Expression::Number(Number::new(n))
+    }
 }
 
 impl std::ops::Neg for Expression {

@@ -57,6 +57,12 @@ mod test {
 pub struct Number(f64);
 impl Eq for Number {}
 
+impl Number {
+    pub fn new(n: f64) -> Number {
+        Number(n)
+    }
+}
+
 impl Parse for Number {
     fn parse(input: &str) -> nom::IResult<&str, Number> {
         use nom::{

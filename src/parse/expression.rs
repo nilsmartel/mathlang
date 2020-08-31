@@ -184,7 +184,7 @@ fn direct(i: &str) -> IResult<&str, Expression> {
 fn literal(i: &str) -> IResult<&str, Expression> {
     use nom::{combinator::map, multi::many0, sequence::pair};
     map(
-        pair(Identifier::parse, many0(direct)),
+        pair(Identifier::parse, many0(skip_ws(direct))),
         |(identifier, parameters)| Expression::Literal {
             identifier,
             parameters,
@@ -201,6 +201,7 @@ fn number(i: &str) -> IResult<&str, Expression> {
 mod tests {
     use super::super::Parse;
     use super::*;
+
     #[test]
     fn expression() {
         fn test(input: &str, expected: Expression) {

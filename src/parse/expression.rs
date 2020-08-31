@@ -216,6 +216,13 @@ mod tests {
             },
         );
         test(
+            "sin 7",
+            Literal {
+                identifier: "sin".into(),
+                parameters: vec![Expression::from(7.0)],
+            },
+        );
+        test(
             "a+b",
             Add(Expression::from("a").boxed(), Expression::from("b").boxed()),
         );

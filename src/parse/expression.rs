@@ -202,12 +202,12 @@ mod tests {
     use super::super::Parse;
     use super::*;
 
+    fn test(input: &str, expected: Expression) {
+        assert_eq!(Expression::parse(input), Ok(("", expected)))
+    }
+
     #[test]
     fn expression() {
-        fn test(input: &str, expected: Expression) {
-            assert_eq!(Expression::parse(input), Ok(("", expected)))
-        }
-
         use Expression::*;
         test(
             "sin",
@@ -245,6 +245,25 @@ mod tests {
                 )
                 .boxed(),
             ),
+        )
+    }
+    #[test]
+    fn literal() {
+        test(
+            "f a b",
+            Expression::Literal {
+                identifier: "f".into(),
+                parameters: vec![
+                    Expression::Literal {
+                        identifier: "a".into(),
+                        parameters: Vec::new(),
+                    },
+                    Expression::Literal {
+                        identifier: "b".into(),
+                        parameters: Vec::new(),
+                    },
+                ],
+            },
         )
     }
 }

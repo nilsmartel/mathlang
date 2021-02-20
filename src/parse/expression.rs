@@ -16,7 +16,7 @@ pub enum Expression {
     SquareRoot(Box<Expression>),
     Negate(Box<Expression>),
     Abs(Box<Expression>),
-    Literal {
+    FunctionCall {
         identifier: Identifier,
         parameters: Vec<Expression>,
     },
@@ -145,7 +145,7 @@ fn negate(i: &str) -> IResult<&str, Expression> {
         use nom::combinator::map;
         return map(skip_ws(direct), |e| Expression::Negate(e.boxed()))(rest);
     }
-    direct(i)
+    function_call(i)
 }
 
 fn direct(i: &str) -> IResult<&str, Expression> {
@@ -162,13 +162,24 @@ fn direct(i: &str) -> IResult<&str, Expression> {
     ))(i)
 }
 
-fn literal(i: &str) -> IResult<&str, Expression> {
+fn function_call(i: &str) -> IResult<&str, Expression> {
     use nom::{combinator::map, multi::many0, sequence::pair};
     map(
         pair(Identifier::parse, many0(skip_ws(direct))),
-        |(identifier, parameters)| Expression::Literal {
+        |(identifier, parameters)| Expression::FunctionCall {
             identifier,
             parameters,
+        },
+    )(i)
+}
+
+fn literal(i: &str) -> IResult<&str, Expression> {
+    use nom::combinator::map;
+    map(
+        Identifier::parse,
+        |identifier| Expression::FunctionCall {
+            identifier,
+            parameters: Vec::new(),
         },
     )(i)
 }
@@ -192,14 +203,14 @@ mod tests {
         use Expression::*;
         test(
             "sin",
-            Literal {
+            FunctionCall {
                 identifier: "sin".into(),
                 parameters: Vec::new(),
             },
         );
         test(
             "sin 7",
-            Literal {
+            FunctionCall {
                 identifier: "sin".into(),
                 parameters: vec![Expression::from(7.0)],
             },
@@ -228,18 +239,51 @@ mod tests {
             ),
         )
     }
+
+
     #[test]
-    fn literal() {
+    fn function_call_simple() {
         test(
-            "f a b",
-            Expression::Literal {
+            "f",
+            Expression::FunctionCall {
+                identifier: "f".into(),
+                parameters: Vec::new(),
+            },
+        )
+    }
+    #[test]
+    fn function_call_nested() {
+        test(
+            "f (a b)",
+            Expression::FunctionCall {
                 identifier: "f".into(),
                 parameters: vec![
-                    Expression::Literal {
+                    Expression::FunctionCall {
+                        identifier: "a".into(),
+                        parameters: vec![
+                            Expression::FunctionCall {
+                                identifier: "b".into(),
+                                parameters: Vec::new(),
+                            },
+                        ],
+                    },
+
+                ],
+            },
+        )
+    }
+    #[test]
+    fn function_call_2_arguments() {
+        test(
+            "f a b",
+            Expression::FunctionCall {
+                identifier: "f".into(),
+                parameters: vec![
+                    Expression::FunctionCall {
                         identifier: "a".into(),
                         parameters: Vec::new(),
                     },
-                    Expression::Literal {
+                    Expression::FunctionCall {
                         identifier: "b".into(),
                         parameters: Vec::new(),
                     },

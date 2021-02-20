@@ -16,7 +16,7 @@ where
     }
 }
 
-pub fn parse_expression_ast(input: &str) -> Option<Expression> {
+pub fn parse_ast(input: &str) -> Option<Expression> {
     match Expression::parse_ws(input) {
         Ok((rest, ast)) if is_all_whitespace(rest) => Some(ast),
         _ => None,

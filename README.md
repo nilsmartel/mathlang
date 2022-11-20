@@ -6,7 +6,7 @@ example usage:
 ```rust
 use mathlang::parse_expression;
 
-let expr = parse_expression("3a^2 + 2b^2 + √2").unwrap()
+let expr = parse_expression("3a^2 + 2b^2 + √2")?;
 ```
 
 ## Planned
